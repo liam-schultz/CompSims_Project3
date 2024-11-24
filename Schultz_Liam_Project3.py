@@ -58,3 +58,14 @@ mass_dif = 100*(cmp_masses-DOP_masses)/DOP_masses
 print("Rho_c\t\t\tRadius Percent Difference\tMass Percent Difference")
 for i in range(len(rho_cs)):
     print(f"{rho_cs[i]:e}\t{rad_dif[i]:f}%\t\t\t\t\t{mass_dif[i]:f}%")
+
+wd_data = np.loadtxt("wd_mass_radius.csv", skiprows=1, delimiter=',')
+print(wd_data)
+wd_data[:, 0:2] *= 1.989e33
+wd_data[:, 2:] *= 6.957e10
+
+print(wd_data)
+
+plt.plot(masses, radii)
+plt.errorbar(wd_data[:, 0], wd_data[:, 2], xerr=wd_data[:, 1], yerr=wd_data[:, 3], fmt=".k")
+plt.show()
