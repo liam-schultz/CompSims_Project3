@@ -1,6 +1,11 @@
 import numpy as np
 import scipy as sp
 
+mu_e = 2
+R_0 = 7.72e8/mu_e
+M_0 = 5.67e33/(mu_e**2)
+density_threshold = 1e-5
+
 def drhodr_dmdr(r, state):
     #state = [rho, m]
     rho = state[0]
@@ -10,13 +15,20 @@ def drhodr_dmdr(r, state):
     return [drho, dm]
 
 def zero_density(r, state):
-    zero_density.terminal = True
-    return state[0]
+    # density_threshold prevents the solver from getting stuck
+    return state[0] - density_threshold
+zero_density.terminal = True
 
 rho_cs = np.linspace(1e-1, 2.5e6, 10)
 solutions = []
 for rho_c in rho_cs:
-    solutions.append(sp.integrate.solve_ivp(drhodr_dmdr, (1e-100, 1e300), [10, 0], events=zero_density))
+    solutions.append(sp.integrate.solve_ivp(drhodr_dmdr, (1e-100, 1e300), [rho_c, 0], events=zero_density))
 
-radii = [solution.t_events[0][0] for solution in solutions]
-masses = [solution.y_events[0][0][1] for solution in solutions]
+radii = np.array([solution.t_events[0][0] for solution in solutions])
+masses = np.array([solution.y_events[0][0][1] for solution in solutions])
+
+radii*=R_0
+masses*=M_0
+
+print(radii)
+print(masses)
