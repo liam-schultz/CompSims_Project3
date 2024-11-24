@@ -60,12 +60,18 @@ for i in range(len(rho_cs)):
     print(f"{rho_cs[i]:e}\t{rad_dif[i]:f}%\t\t\t\t\t{mass_dif[i]:f}%")
 
 wd_data = np.loadtxt("wd_mass_radius.csv", skiprows=1, delimiter=',')
-print(wd_data)
+
 wd_data[:, 0:2] *= 1.989e33
 wd_data[:, 2:] *= 6.957e10
 
-print(wd_data)
+rho_cs = np.logspace(-1, np.log(2.5e6), 1000)
+
+radii, masses = solve(rho_cs)
 
 plt.plot(masses, radii)
 plt.errorbar(wd_data[:, 0], wd_data[:, 2], xerr=wd_data[:, 1], yerr=wd_data[:, 3], fmt=".k")
+plt.title("Radius vs Mass for Values of $\\rho_c$ between $10^{-1}$ and $2.5\\cdot10^6$")
+plt.legend(["Theoretical", "Experimental"])
+plt.xlabel("Mass (g)")
+plt.ylabel("Radius (cm)")
 plt.show()
