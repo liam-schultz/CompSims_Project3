@@ -73,7 +73,7 @@ plt.xlabel("Mass (g)")
 plt.ylabel("Radius (cm)")
 plt.show()
 print(f"Chandrasekhar limit: {(5.836/mu_e**2)*1.989e33}g")
-print(f"Estimate: {masses[-1]}")
+print(f"Estimate: {masses[-1]}g")
 print(f"Percent difference: {100*((5.836/mu_e**2)*1.989e33 - masses[-1])/masses[-1]}%\n")
 
 #pick 3 values of rho_c to try another solving method on
@@ -113,3 +113,5 @@ plt.legend(["Theoretical", "Experimental"])
 plt.xlabel("Mass (g)")
 plt.ylabel("Radius (cm)")
 plt.show()
+
+#Repo hosted at https://github.com/liam-schultz/CompSims_Project3
