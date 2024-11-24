@@ -13,6 +13,10 @@ def zero_density(r, state):
     zero_density.terminal = True
     return state[0]
 
+rho_cs = np.linspace(1e-1, 2.5e6, 10)
+solutions = []
+for rho_c in rho_cs:
+    solutions.append(sp.integrate.solve_ivp(drhodr_dmdr, (1e-100, 1e300), [10, 0], events=zero_density))
 
-sol = sp.integrate.solve_ivp(drhodr_dmdr, (1e-100, 1e300), [10, 0], events=zero_density)
-print(sol)
+radii = [solution.t_events[0][0] for solution in solutions]
+masses = [solution.y_events[0][0][1] for solution in solutions]
