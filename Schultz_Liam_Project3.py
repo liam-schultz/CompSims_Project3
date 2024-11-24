@@ -20,10 +20,10 @@ def zero_density(r, state):
     return state[0] - density_threshold
 zero_density.terminal = True
 
-def solve(rho):
+def solve(rho, method="RK45"):
     solutions = []
-    for rho_c in rho_cs:
-        solutions.append(sp.integrate.solve_ivp(drhodr_dmdr, (1e-100, 1e300), [rho_c, 0], events=zero_density))
+    for rho_c in rho:
+        solutions.append(sp.integrate.solve_ivp(drhodr_dmdr, (1e-100, 1e300), [rho_c, 0], events=zero_density, method=method))
 
     radii = np.array([solution.t_events[0][0] for solution in solutions])
     masses = np.array([solution.y_events[0][0][1] for solution in solutions])
