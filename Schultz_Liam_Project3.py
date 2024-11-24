@@ -47,3 +47,14 @@ print(f"Estimate: {masses[-1]}")
 print(f"Percent difference: {100*((5.836/mu_e**2)*1.989e33 - masses[-1])/masses[-1]}%\n")
 
 rho_cs = np.array([rho_cs[0], rho_cs[2], rho_cs[-1]])
+cmp_radii = np.array([radii[0], radii[2], radii[-1]])
+cmp_masses = np.array([masses[0], masses[2], masses[-1]])
+
+DOP_radii, DOP_masses = solve(rho_cs, "DOP853")
+
+rad_dif = 100*(cmp_radii-DOP_radii)/DOP_radii
+mass_dif = 100*(cmp_masses-DOP_masses)/DOP_masses
+
+print("Rho_c\t\t\tRadius Percent Difference\tMass Percent Difference")
+for i in range(len(rho_cs)):
+    print(f"{rho_cs[i]:e}\t{rad_dif[i]:f}%\t\t\t\t\t{mass_dif[i]:f}%")
