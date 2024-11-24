@@ -33,7 +33,7 @@ def solve(rho, method="RK45"):
 
     return radii, masses
 
-rho_cs = np.logspace(-1, np.log(2.5e6), 10)
+rho_cs = np.logspace(-1, np.log10(2.5e6), 10)
 
 radii, masses = solve(rho_cs)
 
@@ -64,7 +64,7 @@ wd_data = np.loadtxt("wd_mass_radius.csv", skiprows=1, delimiter=',')
 wd_data[:, 0:2] *= 1.989e33
 wd_data[:, 2:] *= 6.957e10
 
-rho_cs = np.logspace(-1, np.log(2.5e6), 1000)
+rho_cs = np.logspace(-1, np.log10(2.5e6), 1000)
 
 radii, masses = solve(rho_cs)
 
