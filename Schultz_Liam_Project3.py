@@ -20,16 +20,22 @@ def zero_density(r, state):
     return state[0] - density_threshold
 zero_density.terminal = True
 
+def solve(rho):
+    solutions = []
+    for rho_c in rho_cs:
+        solutions.append(sp.integrate.solve_ivp(drhodr_dmdr, (1e-100, 1e300), [rho_c, 0], events=zero_density))
+
+    radii = np.array([solution.t_events[0][0] for solution in solutions])
+    masses = np.array([solution.y_events[0][0][1] for solution in solutions])
+
+    radii *= R_0
+    masses *= M_0
+
+    return radii, masses
+
 rho_cs = np.logspace(-1, np.log(2.5e6), 10)
-solutions = []
-for rho_c in rho_cs:
-    solutions.append(sp.integrate.solve_ivp(drhodr_dmdr, (1e-100, 1e300), [rho_c, 0], events=zero_density))
 
-radii = np.array([solution.t_events[0][0] for solution in solutions])
-masses = np.array([solution.y_events[0][0][1] for solution in solutions])
-
-radii*=R_0
-masses*=M_0
+radii, masses = solve(rho_cs)
 
 plt.scatter(masses, radii)
 plt.title("Radius vs Mass for Values of $\\rho_c$ between $10^{-1}$ and $2.5\\cdot10^6$")
@@ -39,3 +45,5 @@ plt.show()
 print(f"Chandrasekhar limit: {(5.836/mu_e**2)*1.989e33}g")
 print(f"Estimate: {masses[-1]}")
 print(f"Percent difference: {100*((5.836/mu_e**2)*1.989e33 - masses[-1])/masses[-1]}%\n")
+
+rho_cs = np.array([rho_cs[0], rho_cs[2], rho_cs[-1]])
